@@ -1,7 +1,8 @@
 <?php
-
+use App\Http\Controllers\PasswordResetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -23,13 +24,13 @@ Route::post('login', [App\Http\Controllers\UserController::class, 'login']);
 
 
 Route::group([    
-    'namespace' => 'Auth',    
+       
     'middleware' => 'api',    
     'prefix' => 'password'
 ], function () { 
 
-    Route::post('create', 'PasswordResetController@create');
-    Route::get('find/{token}', 'PasswordResetController@find');
-    Route::post('reset', 'PasswordResetController@reset');
+    Route::post('create',[PasswordResetController::class, 'create']);
+    Route::get('find/{token}', [PasswordResetController::class, 'find']);
+    Route::post('reset', [PasswordResetController::class, 'reset']);
 });
 

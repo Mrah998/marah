@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Notifications\PasswordResetRequest;
@@ -7,6 +7,9 @@ use App\Notifications\PasswordResetSuccess;
 use App\Models\User;
 use App\Models\PasswordReset;
 use Auth;
+use Illuminate\Support\Str;
+use App\Models\Notifications;
+
 
 class PasswordResetController extends Controller
 {
@@ -34,9 +37,17 @@ class PasswordResetController extends Controller
              ]
         );
         if ($user && $passwordReset)
+        $notification =new Notifications;
+        $notification->user_id=$user->id;
+        $notification->title="reset password";
+        $notification->text="We have e-mailed your password reset link!";
+        $notification->save();
+        
             $user->notify(
                 new PasswordResetRequest($passwordReset->token)
             );
+            
+       
         return response()->json([
             'message' => 'We have e-mailed your password reset link!'
         ]);
